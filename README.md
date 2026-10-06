@@ -1,3 +1,5 @@
+Live Deployment: https://guru-postmark.netlify.app/
+
 📧 Spam Mail Detection using Machine Learning
 
 A machine learning project that classifies SMS/email messages as Spam or Ham (Not Spam) using the Multinomial Naive Bayes algorithm and TF-IDF feature extraction.
