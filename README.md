@@ -1,4 +1,5 @@
-Live Deployment: https://guru-postmark.netlify.app/
+📌Live Deployment: https://guru-postmark.netlify.app/
+
 
 📧 Spam Mail Detection using Machine Learning
 
