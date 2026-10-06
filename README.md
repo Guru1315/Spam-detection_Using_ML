@@ -1,76 +1,93 @@
-📌Live Deployment: https://guru-postmark.netlify.app/
 
+📧 Spam Mail Detector
 
-📧 Spam Mail Detection using Machine Learning
+A machine learning project that classifies email / SMS messages as Spam or Ham (not spam). The trained model runs directly in the browser, so the app can be hosted for free as a static website (for example on Netlify) with no backend or API.
 
-A machine learning project that classifies SMS/email messages as Spam or Ham (Not Spam) using the Multinomial Naive Bayes algorithm and TF-IDF feature extraction.
+🔗 Live Demo: https://guru-postmark.netlify.app/
 
 📌 Overview
 
-This project builds a text classification model that automatically detects spam messages. It uses a labeled SMS dataset, converts text into numerical features using TF-IDF vectorization, and trains a Naive Bayes classifier to distinguish between spam and legitimate (ham) messages.
+Spam messages waste time and can be used for phishing and scams. This project builds a text classifier that learns from thousands of labelled messages and predicts whether a new message is spam, along with a confidence score.
 
-🧠 How It Works
-Data Loading – Downloads the SMS dataset (sms.tsv) directly from a public GitHub source.
-Preprocessing – Maps labels (ham → 0, spam → 1) and splits data into training (80%) and testing (20%) sets.
-Feature Extraction – Converts raw text messages into numerical vectors using TfidfVectorizer (with English stop-word removal).
-Model Training – Trains a MultinomialNB (Naive Bayes) classifier on the TF-IDF features.
-Evaluation – Reports accuracy, confusion matrix, and a full classification report (precision, recall, F1-score).
-Custom Predictions – Tests the trained model on custom sample messages to demonstrate real-world predictions.
-📂 Dataset
-
-The dataset used is the SMS Spam Collection, a tab-separated file containing SMS messages labeled as ham or spam. It is downloaded automatically when the script runs — no manual download needed.
-
+✨ Features
+Classifies any pasted email or SMS text as Spam or Ham
+Shows the spam and ham probability for each prediction
+Built-in example messages for quick testing
+Model performance section with accuracy and confusion matrix
+Runs fully in the browser (no server, no API calls)
 🛠️ Tech Stack
-Python 3
-pandas – data handling
-scikit-learn – TF-IDF vectorization, Naive Bayes model, evaluation metrics
-urllib – dataset download
+Part	Tools
+Language	Python, JavaScript
+ML / Data	scikit-learn, pandas
+Text features	TF-IDF (TfidfVectorizer)
+Algorithm	Multinomial Naive Bayes
+Frontend	HTML, CSS, JavaScript
+Hosting	Netlify (static site)
+Experimentation	Google Colab
+📊 Dataset
+
+SMS Spam Collection: about 5,570 labelled messages (ham or spam).
+
+⚙️ How It Works
+Load data: read the labelled SMS dataset with pandas and map ham → 0, spam → 1.
+Split: 80% training and 20% testing (random_state=42).
+Feature extraction: convert text to numbers with TF-IDF, removing English stop words. The vectorizer is fitted on training data only, to avoid data leakage.
+Train: fit a Multinomial Naive Bayes classifier.
+Evaluate: accuracy, confusion matrix, precision, recall and F1-score on the unseen test set.
+Export: the vocabulary, IDF weights and Naive Bayes probabilities are saved to model.json.
+Predict in the browser: JavaScript applies the same TF-IDF and Naive Bayes calculation to the user's message.
+📈 Results
+Metric	Value
+Accuracy	97.85%
+Spam precision	100%
+Spam recall	83.9%
+Ham recall	100%
+
+Confusion matrix (test set of 1,115 messages)
+
+	Predicted Ham	Predicted Spam
+Actual Ham	966	0
+Actual Spam	24	125
+
+The model never marked a genuine message as spam, and it caught about 84% of the spam. The remaining 24 spam messages were missed.
+
 📁 Project Structure
-spam-mail-detection/
-├── README.md
-├── requirements.txt
-└── spam_mail_detection.py
+spam-detector/
+├── netlify_site/
+│   ├── index.html        # web app (UI + prediction logic)
+│   └── model.json        # exported trained model
+├── training/
+│   └── train_export.py   # trains the model and creates model.json
+└── README.md
+🚀 Run Locally
 
-⚙️ Installation & Usage
-Clone the repository:
-   git clone https://github.com/<Guru1315>/spam-detection.git
-   cd spam-detection
-   
-Install dependencies:
-   pip install -r requirements.txt
-   
-Run the script:
-   python spam_mail_detection.py
+Use the web app
 
-The script will automatically download the dataset, train the model, print evaluation metrics, and show predictions on sample custom messages.
+bash
+cd netlify_site
+python -m http.server 8000
 
-📊 Sample Output
-=== Model Accuracy: 96.77% ===
+Then open http://localhost:8000. (A local server is needed because the page loads model.json.)
 
-=== Confusion Matrix ===
-True Negative (Ham correctly identified): 965
-False Positive (Ham incorrectly marked as Spam): 0
-False Negative (Spam incorrectly marked as Ham): 36
-True Positive (Spam correctly identified): 114
+Retrain the model
 
-=== Detailed Classification Report ===
-              precision    recall  f1-score   support
+bash
+pip install pandas scikit-learn
+cd training
+# place sms.tsv (the dataset) in this folder
+python train_export.py
 
-         Ham       0.96      1.00      0.98       965
-        Spam       1.00      0.76      0.86       150
+Copy the new model.json into netlify_site/.
 
-(Actual numbers may vary slightly depending on train/test split.)
+🌐 Deployment
+
+The netlify_site folder is a static site. Drag and drop it onto Netlify, or connect this GitHub repo and set the publish directory to netlify_site.
 
 🔮 Future Improvements
-Try other algorithms (Logistic Regression, SVM, Random Forest) for comparison
-Use word embeddings (Word2Vec, GloVe) instead of TF-IDF
-Deploy as a simple web app (Flask/Streamlit) for live message testing
-Add support for email (not just SMS) datasets
+Train on a larger email-specific dataset to handle long emails better
+Compare with other models (Logistic Regression, SVM, Random Forest)
+Improve spam recall with threshold tuning
+Add batch file upload for checking many messages at once
+👤 Author
 
-📄 License :
-
-This project is open-source and available under the MIT License.
-
-🙋‍♂️ Author:
-
-Built as part of academic coursework in Machine Learning / AI.
+Guru Charan M B.Tech CSE (AI), Saveetha University 
