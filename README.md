@@ -65,21 +65,26 @@ The model never marked a genuine message as spam, and it caught about 84% of the
 ## 📁 Project Structure
 
 ```
-spam-detector/
-├── netlify_site/
-│   ├── index.html        # web app (UI + prediction logic)
-│   └── model.json        # exported trained model
-├── training/
-│   └── train_export.py   # trains the model and creates model.json
+Spam-detection_Using_ML/
+├── Spam Detection app/
+│   ├── index.html                  # web app (UI + prediction logic)
+│   ├── model.json                  # exported trained model
+│   ├── train_export.py             # trains the model and creates model.json
+│   ├── spam-detector-netlify.zip   # ready-to-upload bundle (netlify_site/ with index.html + model.json)
+│   └── README.md                   # notes for this folder
+├── spam_mail_detection.txt         # the full Colab / terminal script (Python saved as .txt)
+├── requirementss.txt               # Python dependencies (pandas, scikit-learn)
 └── README.md
 ```
+
+`spam_mail_detection.txt` is the original experiment: it downloads the dataset, trains and evaluates the model, prints the accuracy, confusion matrix and classification report, and then classifies five sample messages. `train_export.py` does the same training and then writes `model.json` for the website. To run `spam_mail_detection.txt`, save a copy with a `.py` extension.
 
 ## 🚀 Run Locally
 
 **Use the web app**
 
 ```bash
-cd netlify_site
+cd "Spam Detection app"
 python -m http.server 8000
 ```
 
@@ -88,17 +93,17 @@ Then open `http://localhost:8000`. (A local server is needed because the page lo
 **Retrain the model**
 
 ```bash
-pip install pandas scikit-learn
-cd training
-# place sms.tsv (the dataset) in this folder
+pip install -r requirementss.txt
+cd "Spam Detection app"
+curl -o sms.tsv https://raw.githubusercontent.com/justmarkham/pycon-2016-tutorial/master/data/sms.tsv
 python train_export.py
 ```
 
-Copy the new `model.json` into `netlify_site/`.
+`train_export.py` reads `sms.tsv` from the folder you run it in and overwrites `model.json` there, so the web app picks up the new model straight away. It prints the accuracy and confusion matrix when it finishes.
 
 ## 🌐 Deployment
 
-The `netlify_site` folder is a static site. Drag and drop it onto [Netlify](https://www.netlify.com/), or connect this GitHub repo and set the publish directory to `netlify_site`.
+The site is just `index.html` plus `model.json`, so any static host works. To use [Netlify](https://www.netlify.com/), unzip `Spam Detection app/spam-detector-netlify.zip` and drag the `netlify_site` folder onto Netlify. Deploying the whole `Spam Detection app` folder also works, but it would publish `train_export.py` and the zip as well.
 
 ## 🔮 Future Improvements
 
